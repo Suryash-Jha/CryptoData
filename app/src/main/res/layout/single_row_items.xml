@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/CryptoIcon"
         android:layout_width="50sp"
-        android:layout_height="50sp"
+        android:layout_height="70sp"
         tools:srcCompat="@tools:sample/avatars"
         android:layout_marginRight="30sp"/>
     <LinearLayout
