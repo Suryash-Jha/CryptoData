@@ -1,5 +1,6 @@
 package com.example.cryptodata
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.squareup.picasso.Picasso
 
@@ -36,15 +39,17 @@ class Custom_adapter(private val ctx: Context, private val cryptoList: List<Coin
         val name= myConvertView?.findViewById<TextView>(R.id.CryptoName)
         val price= myConvertView?.findViewById<TextView>(R.id.CryptoPrice)
 
-//        val imageExt=  cryptoList[position].iconUrl?.takeLast(3)
-//        if (imageExt != null) {
-//            Log.d("ext", imageExt)
-//        }
-//        if(imageExt!= "svg")
+        val imageExt=  cryptoList[position].iconUrl?.takeLast(3)
+
+        if(imageExt!= "svg")
         Picasso.get().load(cryptoList[position].iconUrl).into(icon)
-//        else {
+        else {
 //            Log.d("icon", cryptoList[position].iconUrl.toString() )
-//            GlideToVectorYou.init().load(Uri.parse(cryptoList[position].iconUrl), icon)
+            GlideToVectorYou.justLoadImage(ctx as Activity?, Uri.parse(cryptoList[position].iconUrl), icon)
+//            GlideToVectorYou.init().load(Uri.parse("https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg"), icon)
+        }
+
+
 //        }
         name?.text= (cryptoList[position].name)
         price?.text= "$ "+ (cryptoList[position].price)

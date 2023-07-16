@@ -22,18 +22,11 @@ class MainActivity : AppCompatActivity() {
         val url = "https://coinranking1.p.rapidapi.com/coins?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=24h&tiers%5B0%5D=1&orderBy=marketCap&orderDirection=desc&limit=50&offset=0"
         val textView= findViewById<TextView>(R.id.textView1)
         val listView= findViewById<ListView>(R.id.listView)
-        // Create an empty adapter initially
         callApi(url) { x ->
             if (x != null) {
-
                 listView.adapter= Custom_adapter(this, x)
-//                for (coin in x) {
-//                    textView.text= coin.toString()
-//                    Log.d("coin", coin.toString())
-//                }
             } else {
                 Log.d("err", "error occured")
-                // Handle the case when x is null or the API call failed
             }
         }
 
