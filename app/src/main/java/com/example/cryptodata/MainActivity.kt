@@ -3,11 +3,15 @@ package com.example.cryptodata
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.ListAdapter
+import android.widget.ListView
 import android.widget.TextView
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
@@ -16,11 +20,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val url = "https://coinranking1.p.rapidapi.com/coins?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=24h&tiers%5B0%5D=1&orderBy=marketCap&orderDirection=desc&limit=50&offset=0"
-        callApi(url)
+        val textView= findViewById<TextView>(R.id.textView1)
+        val listView= findViewById<ListView>(R.id.listView)
+        // Create an empty adapter initially
+        callApi(url) { x ->
+            if (x != null) {
+
+                listView.adapter= Custom_adapter(this, x)
+//                for (coin in x) {
+//                    textView.text= coin.toString()
+//                    Log.d("coin", coin.toString())
+//                }
+            } else {
+                Log.d("err", "error occured")
+                // Handle the case when x is null or the API call failed
+            }
+        }
+
+
+
 
     }
 
-    private fun callApi(url: String) {
+
+
+    private fun callApi(url: String, callback: (List<CoinsItem>?) -> Unit) {
 
 //        Sorry for showing my API KEY
         val client = OkHttpClient()
@@ -39,14 +63,15 @@ class MainActivity : AppCompatActivity() {
             data= response.body?.string() ?: "Not Found"
 
             val gson= Gson().fromJson<Response>(data, Response::class.java)
-//            val x= gson.data?.coins?.get(1)?.btcPrice
+            val x= gson.data?.coins
+
 //            Log.d("gson resp", x.toString())
-            GlobalScope.launch(Dispatchers.Main){
-                textView.text= data
+            withContext(Dispatchers.Main) {
+                callback(x as List<CoinsItem>?)
             }
-            Log.d("New Response", data)
+//            Log.d("New Response", data)
 
         }
-        Log.d("Response", data)
+//        Log.d("Response", data)
     }
 }
