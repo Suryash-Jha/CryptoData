@@ -2,6 +2,7 @@ package com.example.cryptodata
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.squareup.picasso.Picasso
 
@@ -53,6 +55,15 @@ class Custom_adapter(private val ctx: Context, private val cryptoList: List<Coin
 //        }
         name?.text= (cryptoList[position].name)
         price?.text= "$ "+ (cryptoList[position].price)
+        myConvertView?.setOnClickListener {
+            Toast.makeText(ctx as Activity?, cryptoList[position].uuid, Toast.LENGTH_SHORT).show()
+            val i= Intent(ctx as Activity?, ShowCoinDetails::class.java)
+            i.putExtra("uuid", cryptoList[position].uuid)
+            ctx.startActivity(i)
+
+
+
+        }
         return myConvertView!!
 
     }

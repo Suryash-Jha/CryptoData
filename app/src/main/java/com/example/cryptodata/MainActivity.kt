@@ -1,12 +1,14 @@
 package com.example.cryptodata
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -15,21 +17,29 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val url = "https://coinranking1.p.rapidapi.com/coins?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=24h&tiers%5B0%5D=1&orderBy=marketCap&orderDirection=desc&limit=50&offset=0"
-        val textView= findViewById<TextView>(R.id.textView1)
-        val listView= findViewById<ListView>(R.id.listView)
-        callApi(url) { x ->
-            if (x != null) {
-                listView.adapter= Custom_adapter(this, x)
-            } else {
-                Log.d("err", "error occured")
-            }
-        }
 
+
+
+if(checkStatus(this)){
+    val url = "https://coinranking1.p.rapidapi.com/coins?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=24h&tiers%5B0%5D=1&orderBy=marketCap&orderDirection=desc&limit=50&offset=0"
+    val textView= findViewById<TextView>(R.id.textView1)
+    val listView= findViewById<ListView>(R.id.listView)
+    callApi(url) { x ->
+        if (x != null) {
+            listView.adapter= Custom_adapter(this, x)
+        } else {
+            Log.d("err", "error occured")
+        }
+    }
+}
+        else{
+            Toast.makeText(this, "No Internet", Toast.LENGTH_SHORT).show()
+        }
 
 
 
@@ -66,5 +76,13 @@ class MainActivity : AppCompatActivity() {
 
         }
 //        Log.d("Response", data)
+    }
+    private fun checkStatus(context: Context): Boolean {
+        val cm= context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager;
+        val networkInfo = cm.activeNetwork
+        var isConnected:Boolean=true
+
+        if(networkInfo == null) isConnected= false
+        return isConnected
     }
 }
