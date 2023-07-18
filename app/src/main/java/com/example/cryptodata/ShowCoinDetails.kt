@@ -41,9 +41,9 @@ class ShowCoinDetails : AppCompatActivity() {
         callApi(url) { x ->
             if (x != null) {
 
-                coinMaxPrice.text = x.allTimeHigh?.price.toString()
-                coinCurrPrice.text = x.price.toString()
-                coinName.text= x.name.toString() + "( " + x.symbol.toString() + " )"
+                coinMaxPrice.text = "$ " + x.allTimeHigh?.price.toString()
+                coinCurrPrice.text = "$ " + x.price.toString()
+                coinName.text= x.name.toString() + " ( " + x.symbol.toString() + " )"
                 coinDesc.text= x.description.toString()
                 val imageExt=  x.iconUrl?.takeLast(3)
 
