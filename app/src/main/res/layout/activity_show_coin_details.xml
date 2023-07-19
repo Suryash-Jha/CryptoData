@@ -101,6 +101,12 @@
             android:textSize="18sp"
             tools:text="Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin Bitcoin " />
 
+        <com.jjoe64.graphview.GraphView
+            android:layout_width = "match_parent"
+            android:layout_height = "200dip"
+            android:id = "@+id/coinGraph"
+            />
+
     </LinearLayout>
 
     </ScrollView>

@@ -1,16 +1,20 @@
 package com.example.cryptodata
 
-import android.app.Activity
 import android.content.Intent
+import android.graphics.DashPathEffect
+import android.graphics.Paint
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.gson.Gson
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+
 
 class ShowCoinDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +34,7 @@ class ShowCoinDetails : AppCompatActivity() {
         var coinName= findViewById<TextView>(R.id.coinName)
         var coinMaxPrice= findViewById<TextView>(R.id.coinMaxPrice)
         var coinCurrPrice= findViewById<TextView>(R.id.coinCurrentPrice)
+        var coinGraph= findViewById<GraphView>(R.id.coinGraph)
 
         var backbutton= findViewById<Button>(R.id.backButton)
         backbutton.setOnClickListener {
@@ -52,10 +58,59 @@ class ShowCoinDetails : AppCompatActivity() {
                 else {
                     GlideToVectorYou.justLoadImage(this, Uri.parse(x.iconUrl.toString()), coinIcon)
                 }
+
+                create_graph(coinGraph, x.sparkline)
+
+
+
             } else {
                 Log.d("err", "error occured")
             }
         }
+
+    }
+
+    private fun create_graph(coinGraph: GraphView?, sparkline: List<String?>?) {
+        val dataPoints = mutableListOf<DataPoint>()
+
+        // Iterating through the sparkline data to create DataPoint objects
+        for (i in sparkline?.indices!!) {
+            val hour = i.toDouble() // hour value starting from 0
+            val value = sparkline[i]?.toDouble()
+            val dataPoint = value?.let { DataPoint(hour, it) }
+            Log.d("Data",hour.toString()+ " " + value.toString() )
+            if (dataPoint != null) {
+                dataPoints.add(dataPoint)
+            }
+        }
+        val series: LineGraphSeries<DataPoint> = LineGraphSeries(dataPoints.toTypedArray())
+//        coinGraph?.animate()
+//        series.title= "24 Hr change"
+        coinGraph!!.title="24 hr change"
+        coinGraph.titleColor= getColor(R.color.yellow)
+        coinGraph.titleTextSize= 40F
+        coinGraph?.viewport!!.isScrollable = true
+
+//        coinGraph?.viewport!!.isScalable = true
+
+        // on below line we are setting scrollable y
+//        coinGraph?.viewport!!.setScrollableY(true)
+
+        // on below line we are setting color for series.
+//        series.color = "#FFFFFF"
+        // styling series
+        // styling series
+        series.title = "Random Curve 1"
+//        series.color = getColor(R.color.purple_700)
+        series.isDrawDataPoints = true
+        series.dataPointsRadius = 5f
+        series.thickness = 3
+
+        if (coinGraph != null) {
+            coinGraph.addSeries(series)
+        }
+//        coinGraph.takeSnapshotAndShare(this, "newImg", "test")
+
 
     }
 
