@@ -70,9 +70,9 @@ class ShowCoinDetails : AppCompatActivity() {
 
     }
 
-    private fun create_graph(coinGraph: GraphView?, sparkline: List<String?>?) {
+    private fun create_graph(coinGraph: GraphView?, Unsparkline: List<String?>?) {
         val dataPoints = mutableListOf<DataPoint>()
-
+        var sparkline= Unsparkline!!.reversed()
         // Iterating through the sparkline data to create DataPoint objects
         for (i in sparkline?.indices!!) {
             val hour = i.toDouble() // hour value starting from 0

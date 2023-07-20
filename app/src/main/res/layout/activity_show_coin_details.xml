@@ -74,7 +74,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Current Price"
+                android:text="Maximum Price"
                 android:textSize="15sp"
 
                 android:layout_weight="1.5"
@@ -86,7 +86,7 @@
                 android:id="@+id/coinMaxPrice"
                 android:textSize="15sp"
 
-                android:layout_weight="1.5"
+                android:layout_weight="1.9"
                 tools:text="1000"
                 />
         </LinearLayout>
